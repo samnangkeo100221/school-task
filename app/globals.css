@@ -1,28 +1,249 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant warm (&:where(.warm, .warm *));
 
 @theme {
-  --color-primary-50: #eef6ff;
-  --color-primary-100: #d9ebff;
-  --color-primary-200: #bcdbff;
-  --color-primary-300: #8ec4ff;
-  --color-primary-400: #59a2ff;
-  --color-primary-500: #327eff;
-  --color-primary-600: #1b5ff7;
-  --color-primary-700: #1347e4;
-  --color-primary-800: #153abb;
-  --color-primary-900: #163493;
-  --color-primary-950: #122159;
-  --font-khmer: 'Noto Sans Khmer', 'Kantumruy Pro', sans-serif;
+  --color-primary-50: #f0f4ff;
+  --color-primary-100: #e0e9ff;
+  --color-primary-200: #c7d5fe;
+  --color-primary-300: #a4bbfc;
+  --color-primary-400: #7c9bf8;
+  --color-primary-500: #4f6ff2;
+  --color-primary-600: #3b55d9;
+  --color-primary-700: #2f43be;
+  --color-primary-800: #2938a4;
+  --color-primary-900: #253381;
+  --color-primary-950: #161e4d;
+  --font-khmer: 'Kantumruy Pro', 'Noto Sans Khmer', system-ui, sans-serif;
+}
+
+:root {
+  --bg-app: #f8fafc;
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #f1f5f9;
+  --border-subtle: #e2e8f0;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+}
+
+.dark {
+  --bg-app: #0b0f19;
+  --bg-surface: #131c2e;
+  --bg-surface-soft: #1a253c;
+  --border-subtle: #24324c;
+  --text-main: #e2e8f0;
+  --text-muted: #94a3b8;
+  --card-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.35);
+}
+
+.warm {
+  --bg-app: #f7f3e9;
+  --bg-surface: #fffdf9;
+  --bg-surface-soft: #eee6d3;
+  --border-subtle: #dfd4bf;
+  --text-main: #2b251f;
+  --text-muted: #736b5e;
+  --card-shadow: 0 1px 4px 0 rgba(68, 64, 60, 0.05);
 }
 
 @layer base {
+  html {
+    color-scheme: light;
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html.dark {
+    color-scheme: dark;
+  }
+
+  html.warm {
+    color-scheme: light;
+  }
+
   body {
-    font-family: 'Noto Sans Khmer', 'Kantumruy Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Kantumruy Pro', 'Noto Sans Khmer', 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.65;
+    background-color: var(--bg-app);
+    color: var(--text-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Relaxed text headers with proper Khmer line height */
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.4;
+    letter-spacing: -0.01em;
   }
 }
 
-/* Custom print styles */
+/* Warm / Eye-Care Mode Surface Mapping (eliminates blue-light glare) */
+.warm {
+  /* Cards and backgrounds */
+  & .bg-white {
+    background-color: #fffdfa !important;
+  }
+  & .bg-slate-50 {
+    background-color: #f7f3e9 !important;
+  }
+  & .bg-slate-100 {
+    background-color: #eee7d5 !important;
+  }
+  & .bg-slate-200 {
+    background-color: #e3dbc7 !important;
+  }
+
+  /* Borders */
+  & .border-slate-200,
+  & .border-slate-200\/80,
+  & .border-slate-100 {
+    border-color: #e2d8c3 !important;
+  }
+
+  /* Text colors */
+  & .text-slate-900,
+  & .text-slate-800 {
+    color: #2b251f !important;
+  }
+  & .text-slate-700,
+  & .text-slate-600 {
+    color: #524a3e !important;
+  }
+  & .text-slate-500,
+  & .text-slate-400 {
+    color: #7b7160 !important;
+  }
+
+  /* Gentle amber accents */
+  & .bg-blue-600 {
+    background-color: #b45309 !important;
+  }
+  & .hover\:bg-blue-700:hover {
+    background-color: #92400e !important;
+  }
+  & .text-blue-600,
+  & .text-blue-700 {
+    color: #b45309 !important;
+  }
+  & .bg-blue-50 {
+    background-color: #fbf3dc !important;
+  }
+  & .text-blue-700 {
+    color: #92400e !important;
+  }
+}
+
+/* Dark Mode Glare Reduction: soft twilight surfaces, non-harsh contrast */
+.dark {
+  & .bg-slate-950 {
+    background-color: #0b0f19 !important;
+  }
+  & .bg-slate-900 {
+    background-color: #111a2e !important;
+  }
+  & .bg-slate-850 {
+    background-color: #142038 !important;
+  }
+  & .bg-slate-800 {
+    background-color: #17233b !important;
+  }
+  & .border-slate-800 {
+    border-color: #1e2c48 !important;
+  }
+  & .border-slate-700 {
+    border-color: #243555 !important;
+  }
+  & .text-slate-100,
+  & .text-white {
+    color: #f1f5f9 !important;
+  }
+  & .text-slate-200 {
+    color: #e2e8f0 !important;
+  }
+  & .text-slate-300 {
+    color: #cbd5e1 !important;
+  }
+  & .text-slate-400 {
+    color: #94a3b8 !important;
+  }
+}
+
+/* Eye-Comfort Card Component */
+.comfort-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  box-shadow: var(--card-shadow);
+  transition: all 0.2s ease;
+}
+
+/* Non-glaring Selection */
+::selection {
+  background-color: rgba(79, 111, 242, 0.2);
+  color: inherit;
+}
+.dark ::selection {
+  background-color: rgba(99, 102, 241, 0.4);
+  color: #f8fafc;
+}
+.warm ::selection {
+  background-color: rgba(217, 119, 6, 0.25);
+  color: #292524;
+}
+
+/* Custom Eye-Friendly Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.4);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.6);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(71, 85, 105, 0.5);
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(71, 85, 105, 0.8);
+}
+.warm ::-webkit-scrollbar-thumb {
+  background: rgba(180, 160, 130, 0.5);
+}
+
+/* Form Controls with Calm Soft Focus (anti-harsh flash) */
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 111, 242, 0.15);
+  border-color: rgba(79, 111, 242, 0.6);
+}
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2);
+  border-color: rgba(129, 140, 248, 0.6);
+}
+.warm input:focus,
+.warm select:focus,
+.warm textarea:focus {
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.2);
+  border-color: rgba(217, 119, 6, 0.6);
+}
+
+/* Custom Print Styles */
 @media print {
   .no-print {
     display: none !important;
@@ -34,20 +255,4 @@
     background: white !important;
     color: black !important;
   }
-}
-
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-.dark ::-webkit-scrollbar-thumb {
-  background: #475569;
 }

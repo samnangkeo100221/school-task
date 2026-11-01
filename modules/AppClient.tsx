@@ -6,9 +6,9 @@ import dynamic from 'next/dynamic';
 const DynamicApp = dynamic(() => import('./App'), {
   ssr: false,
   loading: () => (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
-      <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 animate-pulse mb-3">
-        <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div className="min-h-screen bg-slate-50/70 dark:bg-slate-950 warm:bg-[#f7f3e9] flex flex-col items-center justify-center p-4">
+      <div className="w-12 h-12 rounded-2xl bg-indigo-600/90 warm:bg-[#b45309] flex items-center justify-center text-white shadow-sm mb-3">
+        <svg className="w-6 h-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -17,8 +17,8 @@ const DynamicApp = dynamic(() => import('./App'), {
           />
         </svg>
       </div>
-      <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">MY SCHOOL TASK SYSTEM</h2>
-      <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">កំពុងដំណើរការប្រព័ន្ធគ្រប់គ្រងការងារសាលារៀន...</p>
+      <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 warm:text-[#2b251f]">MY SCHOOL TASK SYSTEM</h2>
+      <p className="text-xs text-slate-500 dark:text-slate-400 warm:text-[#786f60] mt-1 font-medium">កំពុងដំណើរការប្រព័ន្ធគ្រប់គ្រងការងារសាលារៀន...</p>
     </div>
   ),
 });
@@ -32,9 +32,9 @@ export default function AppClient() {
 
   if (!mounted) {
     return (
-      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 flex flex-col items-center justify-center p-4">
-        <div className="w-12 h-12 rounded-2xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 animate-pulse mb-3">
-          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="min-h-screen bg-slate-50/70 dark:bg-slate-950 warm:bg-[#f7f3e9] flex flex-col items-center justify-center p-4">
+        <div className="w-12 h-12 rounded-2xl bg-indigo-600/90 warm:bg-[#b45309] flex items-center justify-center text-white shadow-sm mb-3">
+          <svg className="w-6 h-6 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -43,8 +43,8 @@ export default function AppClient() {
             />
           </svg>
         </div>
-        <h2 className="text-lg font-bold text-slate-800 dark:text-slate-100">MY SCHOOL TASK SYSTEM</h2>
-        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">កំពុងដំណើរការប្រព័ន្ធគ្រប់គ្រងការងារសាលារៀន...</p>
+        <h2 className="text-base font-bold text-slate-800 dark:text-slate-200 warm:text-[#2b251f]">MY SCHOOL TASK SYSTEM</h2>
+        <p className="text-xs text-slate-500 dark:text-slate-400 warm:text-[#786f60] mt-1 font-medium">កំពុងដំណើរការប្រព័ន្ធគ្រប់គ្រងការងារសាលារៀន...</p>
       </div>
     );
   }

@@ -22,7 +22,8 @@ interface AppContextType {
   toasts: ToastMessage[];
   addToast: (type: 'success' | 'error' | 'info' | 'warning', title: string, message?: string) => void;
   removeToast: (id: string) => void;
-  theme: 'light' | 'dark';
+  theme: 'light' | 'warm' | 'dark';
+  setThemeMode: (mode: 'light' | 'warm' | 'dark') => void;
   toggleTheme: () => void;
 }
 
@@ -34,7 +35,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeAcademicYear, setActiveAcademicYear] = useState<AcademicYear | null>(null);
   const [schoolSettings, setSchoolSettings] = useState<SchoolSettings | null>(null);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
-  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setTheme] = useState<'light' | 'warm' | 'dark'>('light');
 
   const addToast = (type: 'success' | 'error' | 'info' | 'warning', title: string, message?: string) => {
     const id = Date.now().toString() + Math.random().toString(36).substring(2, 5);
@@ -48,29 +49,38 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
-  const toggleTheme = () => {
-    const next = theme === 'light' ? 'dark' : 'light';
-    setTheme(next);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('msts_theme', next);
-      if (next === 'dark') {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+  const applyThemeClass = (targetTheme: 'light' | 'warm' | 'dark') => {
+    if (typeof window === 'undefined') return;
+    const root = document.documentElement;
+    root.classList.remove('dark', 'warm');
+    if (targetTheme === 'dark') {
+      root.classList.add('dark');
+    } else if (targetTheme === 'warm') {
+      root.classList.add('warm');
     }
+  };
+
+  const setThemeMode = (mode: 'light' | 'warm' | 'dark') => {
+    setTheme(mode);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('msts_theme', mode);
+      applyThemeClass(mode);
+    }
+  };
+
+  const toggleTheme = () => {
+    const sequence: ('light' | 'warm' | 'dark')[] = ['light', 'warm', 'dark'];
+    const currentIndex = sequence.indexOf(theme);
+    const nextTheme = sequence[(currentIndex + 1) % sequence.length];
+    setThemeMode(nextTheme);
   };
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const savedTheme = localStorage.getItem('msts_theme') as 'light' | 'dark';
-      if (savedTheme) {
+      const savedTheme = localStorage.getItem('msts_theme') as 'light' | 'warm' | 'dark';
+      if (savedTheme && ['light', 'warm', 'dark'].includes(savedTheme)) {
         setTheme(savedTheme);
-        if (savedTheme === 'dark') {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
+        applyThemeClass(savedTheme);
       }
     }
   }, []);

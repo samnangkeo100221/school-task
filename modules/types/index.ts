@@ -214,6 +214,12 @@ export interface LessonPlan {
   subjectId: string;
   date: string;
   topic: string;
+  curriculumId?: string;
+  chapterTitle?: string;
+  lessonTitle?: string;
+  topicTitle?: string;
+  durationMinutes?: number;
+  grade?: number;
   objectives: {
     knowledge: string;
     skills: string;
@@ -289,4 +295,42 @@ export interface AuditLog {
   newValue?: string;
   timestamp: string;
   details?: string;
+}
+
+export type TestType = 'DAILY_QUIZ' | 'WEEKLY_TEST' | 'ORAL_QUESTION' | 'MONTHLY_EXAM' | 'HOMEWORK';
+
+export interface StudentScoreRecord {
+  scoreId: string;
+  testId: string;
+  studentId: string;
+  studentCode: string;
+  studentName: string;
+  gender: 'M' | 'F';
+  score: number; // 0 to 10
+  maxScore: number;
+  feedback?: string;
+}
+
+export interface StudentTest {
+  testId: string;
+  academicYearId: string;
+  classId: string;
+  subjectId: string;
+  teacherId: string;
+  scheduledLessonId?: string;
+  curriculumId?: string;
+  date: string;
+  testTitle: string;
+  chapterTitle?: string;
+  lessonTitle?: string;
+  testType: TestType;
+  maxScore: number;
+  records: StudentScoreRecord[];
+  scores?: StudentScoreRecord[];
+  averageScore?: number;
+  highestScore?: number;
+  lowestScore?: number;
+  passingCount?: number;
+  notes?: string;
+  recordedAt: string;
 }

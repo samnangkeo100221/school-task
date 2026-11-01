@@ -8,7 +8,7 @@ export const AppLayout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors flex">
+    <div className="min-h-screen bg-slate-50/70 dark:bg-slate-950 warm:bg-[#f7f3e9] text-slate-800 dark:text-slate-100 warm:text-[#2b251f] transition-colors duration-200 flex">
       {/* Sidebar */}
       <Sidebar
         isOpen={mobileMenuOpen}

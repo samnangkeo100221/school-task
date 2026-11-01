@@ -3,6 +3,7 @@ import {
   Menu,
   Sun,
   Moon,
+  Eye,
   CalendarRange,
   Shield,
   ChevronDown,
@@ -24,11 +25,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobile }) => {
     academicYears,
     setActiveAcademicYearId,
     theme,
+    setThemeMode,
     toggleTheme
   } = useApp();
 
   const [roleMenuOpen, setRoleMenuOpen] = useState(false);
   const [yearMenuOpen, setYearMenuOpen] = useState(false);
+  const [themeMenuOpen, setThemeMenuOpen] = useState(false);
 
   const roleLabels: { [key in UserRole]: { label: string; desc: string } } = {
     ADMIN: { label: 'អ្នកគ្រប់គ្រងប្រព័ន្ធ (Admin)', desc: 'សិទ្ធិពេញលេញលើគ្រប់មុខងារ' },
@@ -38,7 +41,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobile }) => {
   };
 
   return (
-    <header className="sticky top-0 z-30 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 h-16 flex items-center justify-between px-4 lg:px-6">
+    <header className="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 warm:bg-[#fffdf9]/90 backdrop-blur-md border-b border-slate-200/80 dark:border-slate-800 warm:border-[#dfd4bf] h-16 flex items-center justify-between px-4 lg:px-6 transition-colors">
       {/* Left: Mobile Toggle & Page context */}
       <div className="flex items-center space-x-3">
         <button
@@ -92,54 +95,105 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleMobile }) => {
 
       {/* Right Controls */}
       <div className="flex items-center space-x-3">
-        {/* Role Switcher */}
+        {/* Solo Teacher Identity Badge */}
+        <div className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-50/80 dark:bg-indigo-950/50 warm:bg-[#eee6d3] border border-indigo-100 dark:border-indigo-900/40 warm:border-[#dfd4bf]">
+          <GraduationCap className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 warm:text-[#b45309]" />
+          <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 warm:text-[#78350f]">
+            លោកគ្រូ កែវ សំណាង (គណិតវិទ្យា ៨)
+          </span>
+        </div>
+
+        {/* Eye-Care & Theme Selector */}
         <div className="relative">
           <button
-            onClick={() => setRoleMenuOpen(!roleMenuOpen)}
-            className="flex items-center space-x-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors"
+            onClick={() => setThemeMenuOpen(!themeMenuOpen)}
+            className="flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl border border-slate-200/90 dark:border-slate-700/80 warm:border-[#dfd4bf] bg-slate-100/70 dark:bg-slate-800/70 warm:bg-[#eee6d3] text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors"
+            title="ប្តូររបៀបពន្លឺថែទាំភ្នែក (Eye-Care Theme)"
           >
-            <Shield className="w-3.5 h-3.5 text-blue-600" />
-            <span className="hidden sm:inline font-bold">{currentUser.role}</span>
-            <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+            {theme === 'dark' ? (
+              <Moon className="w-4 h-4 text-indigo-400" />
+            ) : theme === 'warm' ? (
+              <Eye className="w-4 h-4 text-amber-600" />
+            ) : (
+              <Sun className="w-4 h-4 text-amber-500" />
+            )}
+            <span className="hidden sm:inline text-[11px] font-bold">
+              {theme === 'dark' ? 'រាត្រីស្ងប់' : theme === 'warm' ? 'ថែទាំភ្នែក' : 'ពន្លឺស្រទន់'}
+            </span>
+            <ChevronDown className="w-3 h-3 text-slate-400" />
           </button>
 
-          {roleMenuOpen && (
-            <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 py-2 z-50">
-              <div className="px-3 py-1.5 text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                ប្តូរតួនាទីសាកល្បង (Role Switch)
+          {themeMenuOpen && (
+            <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-slate-900 warm:bg-[#fffdf9] rounded-2xl shadow-xl border border-slate-200 dark:border-slate-800 warm:border-[#dfd4bf] py-2 z-50">
+              <div className="px-3 py-1.5 text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                កម្រិតពន្លឺ និងផាសុកភាពភ្នែក
               </div>
-              {(['ADMIN', 'SCHOOL_DIRECTOR', 'TEACHER', 'ATTENDANCE_STAFF'] as UserRole[]).map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    switchUserRole(r);
-                    setRoleMenuOpen(false);
-                  }}
-                  className={`w-full text-left px-3 py-2.5 text-xs transition-colors border-b border-slate-100 dark:border-slate-800/60 last:border-b-0 ${
-                    currentUser.role === r
-                      ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400 font-semibold'
-                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  <p className="font-bold flex items-center justify-between">
-                    <span>{roleLabels[r].label}</span>
-                    {currentUser.role === r && <UserCheck className="w-3.5 h-3.5 text-blue-600" />}
-                  </p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{roleLabels[r].desc}</p>
-                </button>
-              ))}
+              
+              <button
+                onClick={() => {
+                  setThemeMode('light');
+                  setThemeMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
+                  theme === 'light'
+                    ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 font-bold'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <Sun className="w-4 h-4 text-amber-500" />
+                  <div>
+                    <p className="font-semibold">ពន្លឺស្រទន់ (Soft Light)</p>
+                    <p className="text-[10px] text-slate-400">កាត់បន្ថយពន្លឺចាំង</p>
+                  </div>
+                </div>
+                {theme === 'light' && <span className="w-1.5 h-1.5 rounded-full bg-blue-600" />}
+              </button>
+
+              <button
+                onClick={() => {
+                  setThemeMode('warm');
+                  setThemeMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
+                  theme === 'warm'
+                    ? 'bg-amber-100/60 text-amber-900 font-bold'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <Eye className="w-4 h-4 text-amber-600" />
+                  <div>
+                    <p className="font-semibold">ថែទាំភ្នែក (Warm Sepia)</p>
+                    <p className="text-[10px] text-slate-400">ពណ៌ក្រដាស គ្មានពន្លឺខៀវ</p>
+                  </div>
+                </div>
+                {theme === 'warm' && <span className="w-1.5 h-1.5 rounded-full bg-amber-600" />}
+              </button>
+
+              <button
+                onClick={() => {
+                  setThemeMode('dark');
+                  setThemeMenuOpen(false);
+                }}
+                className={`w-full text-left px-3 py-2 text-xs flex items-center justify-between transition-colors ${
+                  theme === 'dark'
+                    ? 'bg-indigo-950/50 text-indigo-300 font-bold'
+                    : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
+                }`}
+              >
+                <div className="flex items-center space-x-2">
+                  <Moon className="w-4 h-4 text-indigo-400" />
+                  <div>
+                    <p className="font-semibold">រាត្រីស្ងប់ភ្នែក (Calm Dark)</p>
+                    <p className="text-[10px] text-slate-400">ងងឹតស្រាល មិនចាំងភ្នែក</p>
+                  </div>
+                </div>
+                {theme === 'dark' && <span className="w-1.5 h-1.5 rounded-full bg-indigo-500" />}
+              </button>
             </div>
           )}
         </div>
-
-        {/* Theme Toggle */}
-        <button
-          onClick={toggleTheme}
-          className="p-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          aria-label="Toggle theme"
-        >
-          {theme === 'dark' ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
-        </button>
 
         {/* User Avatar & Name */}
         <div className="flex items-center space-x-2.5 pl-2 border-l border-slate-200 dark:border-slate-800">

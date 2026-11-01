@@ -18,13 +18,18 @@ import { useApp } from '../contexts/AppContext';
 import { storageService } from '../services/storageService';
 import { excelService } from '../services/excelService';
 import { Student, ClassRoom, AttendanceRecord, AttendanceStatus, ScheduledLesson } from '../types';
+import { useSearchParams } from 'react-router-dom';
 
 export const AttendancePage: React.FC = () => {
   const { activeAcademicYear, currentUser, addToast } = useApp();
+  const [searchParams] = useSearchParams();
   const [classes, setClasses] = useState<ClassRoom[]>([]);
-  const [selectedClassId, setSelectedClassId] = useState<string>('CLS-8A');
-  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [selectedPeriod, setSelectedPeriod] = useState<number>(1);
+  const [selectedClassId, setSelectedClassId] = useState<string>(() => searchParams.get('classId') || 'CLS-8A');
+  const [selectedDate, setSelectedDate] = useState<string>(() => searchParams.get('date') || new Date().toISOString().split('T')[0]);
+  const [selectedPeriod, setSelectedPeriod] = useState<number>(() => {
+    const p = searchParams.get('period');
+    return p ? parseInt(p, 10) : 1;
+  });
   const [students, setStudents] = useState<Student[]>([]);
   const [attendanceMap, setAttendanceMap] = useState<{ [studentId: string]: { status: AttendanceStatus; reason?: string; notes?: string } }>({});
   const [scheduledLessons, setScheduledLessons] = useState<ScheduledLesson[]>([]);
@@ -75,6 +80,15 @@ export const AttendancePage: React.FC = () => {
   useEffect(() => {
     loadData();
   }, [activeAcademicYear, selectedClassId, selectedDate, selectedPeriod]);
+
+  useEffect(() => {
+    const c = searchParams.get('classId');
+    const d = searchParams.get('date');
+    const p = searchParams.get('period');
+    if (c && c !== selectedClassId) setSelectedClassId(c);
+    if (d && d !== selectedDate) setSelectedDate(d);
+    if (p && parseInt(p, 10) !== selectedPeriod) setSelectedPeriod(parseInt(p, 10));
+  }, [searchParams]);
 
   // Find linked scheduled lesson
   const currentSession = scheduledLessons.find(

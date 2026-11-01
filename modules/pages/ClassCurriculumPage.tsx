@@ -17,7 +17,8 @@ import {
   ChevronRight,
   FileText,
   UserCheck,
-  BookCopy
+  BookCopy,
+  Award
 } from 'lucide-react';
 import { useApp } from '../contexts/AppContext';
 import { storageService } from '../services/storageService';
@@ -599,21 +600,28 @@ export const ClassCurriculumPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Links */}
-            <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
+            {/* Direct Workflow Links: Lesson Plan, Attendance, and Student Test */}
+            <div className="flex flex-wrap items-center justify-end gap-2 pt-3 border-t border-slate-100 dark:border-slate-800">
               <NavLink
-                to="/lesson-plans"
-                className="px-4 py-2 bg-blue-50 text-blue-700 font-bold rounded-xl flex items-center gap-1.5 hover:bg-blue-100"
+                to={`/lesson-plans?curriculumId=${selectedLesson.curriculumId}`}
+                className="px-3.5 py-2 bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 font-bold rounded-xl flex items-center gap-1.5 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors"
               >
                 <FileText className="w-4 h-4" />
                 <span>បើកកិច្ចតែងការ</span>
               </NavLink>
               <NavLink
-                to="/attendance"
-                className="px-4 py-2 bg-emerald-50 text-emerald-700 font-bold rounded-xl flex items-center gap-1.5 hover:bg-emerald-100"
+                to={`/attendance?classId=${selectedLesson.classId}&date=${selectedLesson.date}&period=${selectedLesson.periodNumber}`}
+                className="px-3.5 py-2 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 font-bold rounded-xl flex items-center gap-1.5 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 transition-colors"
               >
                 <UserCheck className="w-4 h-4" />
-                <span>កត់ត្រាវត្តមាន</span>
+                <span>ស្រង់អវត្តមាន</span>
+              </NavLink>
+              <NavLink
+                to={`/student-tests?classId=${selectedLesson.classId}&curriculumId=${selectedLesson.curriculumId}&new=true`}
+                className="px-3.5 py-2 bg-indigo-50 text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300 font-bold rounded-xl flex items-center gap-1.5 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 transition-colors"
+              >
+                <Award className="w-4 h-4" />
+                <span>កត់ត្រាតេស្ត</span>
               </NavLink>
             </div>
           </div>

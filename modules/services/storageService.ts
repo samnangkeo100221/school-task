@@ -12,7 +12,8 @@ import {
   LessonPlan,
   AttendanceRecord,
   MakeUpLesson,
-  AuditLog
+  AuditLog,
+  StudentTest
 } from '../types';
 
 import {
@@ -27,6 +28,7 @@ import {
   initialCalendarEvents,
   sampleLessonPlanGrade8Math
 } from '../data/initialData';
+import { standardGrade8LessonPlans } from './lessonPlanData';
 
 import { getFirebaseClient } from './firebase';
 import {
@@ -53,6 +55,7 @@ const STORAGE_KEYS = {
   LESSON_PLANS: 'msts_lesson_plans',
   ATTENDANCE: 'msts_attendance',
   MAKEUP_LESSONS: 'msts_makeup_lessons',
+  TESTS: 'msts_student_tests',
   AUDIT_LOGS: 'msts_audit_logs',
 };
 
@@ -625,7 +628,19 @@ class StorageService {
         console.warn('Firestore lessonPlans error', err);
       }
     }
-    return this.getLocal<LessonPlan[]>(STORAGE_KEYS.LESSON_PLANS, [sampleLessonPlanGrade8Math]);
+    const local = this.getLocal<LessonPlan[]>(STORAGE_KEYS.LESSON_PLANS, standardGrade8LessonPlans);
+    const map = new Map<string, LessonPlan>();
+    for (const p of standardGrade8LessonPlans) {
+      map.set(p.lessonPlanId, p);
+    }
+    for (const p of local) {
+      map.set(p.lessonPlanId, p);
+    }
+    const merged = Array.from(map.values());
+    if (merged.length > local.length) {
+      this.setLocal(STORAGE_KEYS.LESSON_PLANS, merged);
+    }
+    return merged;
   }
 
   public async saveLessonPlansBatch(newPlans: LessonPlan[]): Promise<void> {
@@ -750,6 +765,104 @@ class StorageService {
     list = list.filter(m => m.makeUpId !== makeUpId);
     this.setLocal(STORAGE_KEYS.MAKEUP_LESSONS, list);
     await this.logAction('DELETE', 'makeUpLessons', makeUpId, 'Deleted makeup lesson');
+  }
+
+  // --- Student Tests & Scoring (កត់ត្រាតេស្តសិស្ស) ---
+  public async getStudentTests(academicYearId?: string, classId?: string): Promise<StudentTest[]> {
+    const defaultTests: StudentTest[] = [
+      {
+        testId: 'TEST-01',
+        academicYearId: 'AY-2025-2026',
+        classId: 'CLS-8A',
+        subjectId: 'SUB-MATH-8',
+        teacherId: 'T-001',
+        curriculumId: 'CUR-03',
+        date: '2025-11-12',
+        testTitle: 'តេស្តខ្លីប្រចាំថ្ងៃ៖ វិធានគុណ និងចែកចំនួនគត់រ៉ឺឡាទីវ',
+        chapterTitle: 'ជំពូកទី ១៖ ចំនួនគត់រ៉ឺឡាទីវ',
+        lessonTitle: 'មេរៀនទី ៣៖ ប្រមាណវិធីគុណ និងចែកចំនួនគត់រ៉ឺឡាទីវ',
+        testType: 'DAILY_QUIZ',
+        maxScore: 10,
+        averageScore: 8.5,
+        highestScore: 10,
+        lowestScore: 7,
+        passingCount: 8,
+        notes: 'សិស្ស ៨ក យល់ច្បាស់ពីវិធានសញ្ញាក្នុងការគុណ និងចែក។',
+        recordedAt: '2025-11-12T10:30:00Z',
+        records: [
+          { scoreId: 'SC-01', testId: 'TEST-01', studentId: 'ST-8A-01', studentCode: '8A-01', studentName: 'ចាន់ សុវណ្ណារ៉ា', gender: 'M', score: 9.5, maxScore: 10, feedback: 'គណនាលឿន និងត្រឹមត្រូវ' },
+          { scoreId: 'SC-02', testId: 'TEST-01', studentId: 'ST-8A-02', studentCode: '8A-02', studentName: 'គឹម ស្រីនិច', gender: 'F', score: 10, maxScore: 10, feedback: 'ពូកែណាស់ ល្អឥតខ្ចោះ' },
+          { scoreId: 'SC-03', testId: 'TEST-01', studentId: 'ST-8A-03', studentCode: '8A-03', studentName: 'ហេង ពិសាល', gender: 'M', score: 8, maxScore: 10, feedback: 'ល្អ ច្រឡំសញ្ញា ១ សំណួរ' },
+          { scoreId: 'SC-04', testId: 'TEST-01', studentId: 'ST-8A-04', studentCode: '8A-04', studentName: 'សុខ ម៉ាលី', gender: 'F', score: 8.5, maxScore: 10, feedback: 'ល្អបង្គួរ' },
+          { scoreId: 'SC-05', testId: 'TEST-01', studentId: 'ST-8A-05', studentCode: '8A-05', studentName: 'ឡុង វិបុល', gender: 'M', score: 7, maxScore: 10, feedback: 'ត្រូវប្រយ័ត្នសញ្ញាដក' },
+          { scoreId: 'SC-06', testId: 'TEST-01', studentId: 'ST-8A-06', studentCode: '8A-06', studentName: 'សេង ស្រីលក្ខណ៍', gender: 'F', score: 9, maxScore: 10, feedback: 'ល្អណាស់' },
+          { scoreId: 'SC-07', testId: 'TEST-01', studentId: 'ST-8A-07', studentCode: '8A-07', studentName: 'ទិត្យ វីរៈ', gender: 'M', score: 8, maxScore: 10, feedback: 'ល្អ' },
+          { scoreId: 'SC-08', testId: 'TEST-01', studentId: 'ST-8A-08', studentCode: '8A-08', studentName: 'មាស សុធារី', gender: 'F', score: 8, maxScore: 10, feedback: 'ល្អ' }
+        ]
+      },
+      {
+        testId: 'TEST-02',
+        academicYearId: 'AY-2025-2026',
+        classId: 'CLS-8B',
+        subjectId: 'SUB-MATH-8',
+        teacherId: 'T-001',
+        curriculumId: 'CUR-05',
+        date: '2025-11-26',
+        testTitle: 'តេស្តប្រចាំសប្តាហ៍៖ ប្រមាណវិធីលើចំនួនសនិទាន',
+        chapterTitle: 'ជំពូកទី ២៖ ចំនួនសនិទាន',
+        lessonTitle: 'មេរៀនទី ២៖ ប្រមាណវិធីលើចំនួនសនិទាន',
+        testType: 'WEEKLY_TEST',
+        maxScore: 10,
+        averageScore: 8.25,
+        highestScore: 9.5,
+        lowestScore: 7,
+        passingCount: 4,
+        notes: 'សិស្ស ៨ខ ធ្វើតេស្តប្រចាំសប្តាហ៍បានពិន្ទុល្អ។',
+        recordedAt: '2025-11-26T11:00:00Z',
+        records: [
+          { scoreId: 'SC-09', testId: 'TEST-02', studentId: 'ST-8B-01', studentCode: '8B-01', studentName: 'អ៊ុក រតនា', gender: 'M', score: 8.5, maxScore: 10, feedback: 'ល្អ' },
+          { scoreId: 'SC-10', testId: 'TEST-02', studentId: 'ST-8B-02', studentCode: '8B-02', studentName: 'ប៉ែន សុជាតា', gender: 'F', score: 9.5, maxScore: 10, feedback: 'ល្អណាស់' },
+          { scoreId: 'SC-11', testId: 'TEST-02', studentId: 'ST-8B-03', studentCode: '8B-03', studentName: 'ជ័យ សុវណ្ណ', gender: 'M', score: 8, maxScore: 10, feedback: 'ល្អ' },
+          { scoreId: 'SC-12', testId: 'TEST-02', studentId: 'ST-8B-04', studentCode: '8B-04', studentName: 'នួន ស្រីពៅ', gender: 'F', score: 7, maxScore: 10, feedback: 'ត្រូវរំលឹកភាគបែងរួម' }
+        ]
+      }
+    ];
+
+    let list = this.getLocal<StudentTest[]>(STORAGE_KEYS.TESTS, defaultTests);
+    list = list.map(t => {
+      const recs = t.records || (t as any).scores || [];
+      return {
+        ...t,
+        records: Array.isArray(recs) ? recs : [],
+        scores: Array.isArray(recs) ? recs : []
+      };
+    });
+    if (academicYearId) {
+      list = list.filter(t => t.academicYearId === academicYearId);
+    }
+    if (classId && classId !== 'all') {
+      list = list.filter(t => t.classId === classId);
+    }
+    return list;
+  }
+
+  public async saveStudentTest(test: StudentTest): Promise<void> {
+    const list = this.getLocal<StudentTest[]>(STORAGE_KEYS.TESTS, []);
+    const idx = list.findIndex(t => t.testId === test.testId);
+    if (idx >= 0) {
+      list[idx] = test;
+    } else {
+      list.unshift(test);
+    }
+    this.setLocal(STORAGE_KEYS.TESTS, list);
+    await this.logAction(idx >= 0 ? 'UPDATE' : 'CREATE', 'studentTests', test.testId, 'Saved test: ' + test.testTitle);
+  }
+
+  public async deleteStudentTest(testId: string): Promise<void> {
+    let list = this.getLocal<StudentTest[]>(STORAGE_KEYS.TESTS, []);
+    list = list.filter(t => t.testId !== testId);
+    this.setLocal(STORAGE_KEYS.TESTS, list);
+    await this.logAction('DELETE', 'studentTests', testId, 'Deleted test');
   }
 
   // --- Audit Logs ---
