@@ -1,0 +1,1 @@
+const fs = require('fs'); const chunks = []; process.stdin.on('data', c => chunks.push(c)); process.stdin.on('end', () => { fs.writeFileSync(process.argv[2], Buffer.concat(chunks).toString('utf8'), 'utf8'); console.log('Saved ' + process.argv[2]); });

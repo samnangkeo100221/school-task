@@ -1,0 +1,1457 @@
+MASTER PROMPT: BUILD MY SCHOOL TASK SYSTEM
+
+Complete School Academic & Teacher Management Web Application
+
+You are a senior full-stack software engineer, system architect, database designer, education management specialist, and professional UI/UX designer.
+
+Your task is to DESIGN, DEVELOP, TEST, AND IMPLEMENT a complete production-ready web application named:
+
+MY SCHOOL TASK SYSTEM
+
+The application is designed to manage school academic operations, annual curriculum planning, teacher timetables, daily teaching schedules, lesson plans, student attendance, academic calendars, and teaching performance.
+
+IMPORTANT:
+Build a real, fully functional application. Do not create only a UI prototype, static dashboard, or demonstration website.
+
+Every button, form, filter, table, calendar, report, and database operation must work correctly.
+
+Do not use fake data as actual production data. Use demo data only in a clearly separated demonstration mode.
+
+---
+
+PART 1: TECHNOLOGY AND SYSTEM ARCHITECTURE
+
+1.1 Technology Stack
+
+Use the following technologies:
+
+Frontend:
+
+- React.js
+- TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React Icons
+- Recharts
+- React Router
+- React Hook Form
+- Zod validation
+
+Backend:
+
+- Firebase Authentication
+- Cloud Firestore
+- Firebase Storage
+- Firebase Cloud Functions when server-side processing is required.
+
+Additional:
+
+- Excel import/export using SheetJS.
+- PDF generation.
+- Calendar visualization.
+- Date management using a reliable date library.
+- Responsive layout.
+
+Use Firebase as the permanent database.
+
+Do not use localStorage as the main database.
+
+LocalStorage may only be used for non-sensitive UI preferences such as sidebar state or theme.
+
+1.2 Application Architecture
+
+Organize the project into separate modules:
+
+- components/
+- pages/
+- layouts/
+- services/
+- hooks/
+- contexts/
+- types/
+- utils/
+- firebase/
+- scheduler/
+- reports/
+- validators/
+
+Separate business logic from UI components.
+
+Create reusable components for:
+
+- Data tables.
+- Search and filters.
+- Forms.
+- Confirmation dialogs.
+- Calendar.
+- Date picker.
+- Dropdown menus.
+- Notifications.
+- Charts.
+- Loading states.
+- Error handling.
+
+All database operations must be centralized in service functions.
+
+1.3 Time and Date Standards
+
+The application must support:
+
+- Cambodian timezone: Asia/Phnom_Penh.
+- Khmer date display.
+- Gregorian date storage using consistent timestamps or ISO dates.
+- Khmer and English weekday names.
+- Cambodian public holidays.
+- Academic year management.
+
+Avoid timezone conversion errors when generating teaching schedules.
+
+Store date-only values consistently and handle local teaching times separately.
+
+---
+
+PART 2: DESIGN AND USER INTERFACE
+
+2.1 Application Branding
+
+Application name:
+
+MY SCHOOL TASK SYSTEM
+
+Subtitle:
+
+School Academic & Teaching Management System
+
+Use a professional educational management design.
+
+2.2 Interface Language
+
+Default language: Khmer.
+
+All menus, buttons, forms, notifications, tables, and reports must support Khmer.
+
+Use Noto Sans Khmer or another Khmer-compatible font.
+
+Internal database fields and code identifiers should use English.
+
+2.3 Layout
+
+Desktop:
+
+- Left sidebar navigation.
+- Top navigation bar.
+- Main content area.
+- Dashboard cards.
+- Responsive tables.
+
+Mobile:
+
+- Collapsible navigation.
+- Mobile-friendly forms.
+- Responsive tables.
+- Touch-friendly controls.
+- Easy attendance recording.
+
+Provide light and dark themes.
+
+2.4 Main Navigation
+
+Create these independent pages:
+
+1. ផ្ទាំងគ្រប់គ្រង (Dashboard)
+2. ឆ្នាំសិក្សា (Academic Years)
+3. គ្រប់គ្រងគ្រូ (Teachers)
+4. គ្រប់គ្រងសិស្ស (Students)
+5. គ្រប់គ្រងថ្នាក់ (Classes)
+6. មុខវិជ្ជា (Subjects)
+7. កម្មវិធីសិក្សាប្រចាំឆ្នាំ (Annual Curriculum)
+8. កាលវិភាគគ្រូ (Teacher Timetable)
+9. ប្រតិទិនសាលា (School Calendar)
+10. កម្មវិធីសិក្សាតាមថ្នាក់ (Class Curriculum)
+11. កិច្ចតែងការបង្រៀន (Lesson Plans)
+12. អវត្តមានសិស្ស (Student Attendance)
+13. ម៉ោងបង្រៀនសង (Make-up Lessons)
+14. របាយការណ៍ (Reports)
+15. ការកំណត់ប្រព័ន្ធ (Settings)
+
+Each page must be independent but connected through shared database records.
+
+---
+
+PART 3: USER MANAGEMENT AND SECURITY
+
+3.1 User Roles
+
+Create the following roles:
+
+ADMIN:
+
+- Full access to all modules.
+- Manage users.
+- Manage teachers and students.
+- Manage academic years.
+- Manage curriculum.
+- Manage timetables.
+- Manage calendar.
+- View and export all reports.
+
+SCHOOL_DIRECTOR:
+
+- View school-wide academic performance.
+- Manage and approve academic schedules.
+- View teacher performance.
+- View attendance reports.
+
+TEACHER:
+
+- View personal timetable.
+- View assigned classes.
+- View assigned subjects.
+- Create and edit lesson plans.
+- Record attendance for assigned teaching sessions.
+- Update teaching status.
+- Record teaching notes.
+- View personal reports.
+
+ATTENDANCE_STAFF:
+
+- View authorized classes.
+- Record and edit attendance according to permissions.
+- View attendance reports.
+
+3.2 Security
+
+Use Firebase Authentication.
+
+Create role-based authorization.
+
+Use Firestore Security Rules to protect all sensitive data.
+
+Never rely only on frontend permission checks.
+
+Prevent unauthorized access to:
+
+- Student information.
+- Teacher information.
+- Attendance records.
+- Academic reports.
+- Administrative settings.
+
+Create AuditLogs for important operations.
+
+Record:
+
+- UserID.
+- Action.
+- Collection.
+- RecordID.
+- PreviousValue.
+- NewValue.
+- Timestamp.
+
+---
+
+PART 4: SCHOOL BASIC INFORMATION
+
+Create management modules for:
+
+4.1 Academic Years
+
+Fields:
+
+- academicYearId
+- yearName
+- startDate
+- endDate
+- status
+- description
+
+Features:
+
+- Create academic year.
+- Edit academic year.
+- Activate academic year.
+- Archive completed academic years.
+- Copy curriculum from a previous year.
+- Copy teacher timetables.
+- Configure different calendars for different years.
+
+Never automatically delete previous academic-year records.
+
+4.2 Teachers
+
+Fields:
+
+- teacherId
+- teacherCode
+- fullName
+- gender
+- phone
+- email
+- address
+- subjects
+- assignedClasses
+- employmentStatus
+- userId
+
+Features:
+
+- Add, edit, deactivate, and view teachers.
+- Search by name and teacher code.
+- Import/export Excel.
+- View personal teaching timetable.
+- View teaching workload.
+
+4.3 Students
+
+Fields:
+
+- studentId
+- studentCode
+- fullName
+- gender
+- dateOfBirth
+- classId
+- guardianName
+- guardianPhone
+- status
+
+Features:
+
+- Add and edit students.
+- Import/export Excel.
+- Transfer students between classes.
+- Maintain enrollment history.
+- View individual attendance history.
+
+When a student changes class, preserve previous attendance records.
+
+4.4 Classes
+
+Fields:
+
+- classId
+- grade
+- className
+- academicYearId
+- homeroomTeacherId
+- capacity
+- status
+
+Examples:
+
+- 7A
+- 7B
+- 8A
+- 8B
+- 9A
+
+4.5 Subjects
+
+Fields:
+
+- subjectId
+- subjectCode
+- subjectName
+- description
+- color
+- status
+
+Allow different subjects to be assigned to different classes and teachers.
+
+4.6 Class Enrollment
+
+Create a separate class enrollment system.
+
+Fields:
+
+- enrollmentId
+- studentId
+- classId
+- academicYearId
+- startDate
+- endDate
+- status
+
+The attendance system must retrieve students from the correct enrollment records.
+
+---
+
+PART 5: ANNUAL CURRICULUM MANAGEMENT
+
+Create a complete curriculum management module.
+
+5.1 Curriculum Structure
+
+The curriculum hierarchy:
+
+Academic Year
+→ Grade
+→ Class
+→ Subject
+→ Chapter
+→ Lesson
+→ Topic
+
+Fields:
+
+- curriculumId
+- academicYearId
+- grade
+- subjectId
+- chapterNumber
+- chapterTitle
+- lessonTitle
+- topicTitle
+- lessonOrder
+- requiredPeriods
+- learningObjectives
+- description
+- status
+
+5.2 Curriculum Management Features
+
+Allow administrators to:
+
+- Add chapters.
+- Add lessons.
+- Add multiple topics.
+- Edit lesson titles.
+- Reorder lessons.
+- Set teaching periods per lesson.
+- Duplicate curriculum.
+- Import Excel.
+- Export Excel.
+- Search and filter.
+- View total required periods.
+
+Support different curriculum structures for different grades.
+
+Do not hardcode a particular country's curriculum.
+
+Administrators must be able to customize the curriculum.
+
+5.3 Curriculum Progress
+
+Each curriculum item must display:
+
+- Planned periods.
+- Completed periods.
+- Remaining periods.
+- Completion percentage.
+- Expected completion date.
+- Actual completion date.
+
+---
+
+PART 6: TEACHER TIMETABLE MANAGEMENT
+
+This module controls when teachers teach.
+
+6.1 Teaching Period Settings
+
+Allow administrators to define:
+
+- Number of periods per day.
+- Period number.
+- Start time.
+- End time.
+- Break time.
+- Teaching days.
+- Non-teaching days.
+
+Do not hardcode the number of periods.
+
+6.2 Timetable Fields
+
+- timetableId
+- academicYearId
+- teacherId
+- classId
+- subjectId
+- dayOfWeek
+- periodNumber
+- startTime
+- endTime
+- room
+- effectiveStartDate
+- effectiveEndDate
+- status
+
+6.3 Timetable Views
+
+Provide:
+
+A. Teacher timetable.
+
+B. Class timetable.
+
+C. Weekly timetable.
+
+D. Daily timetable.
+
+E. Timetable by subject.
+
+6.4 Timetable Editing
+
+Features:
+
+- Add teaching sessions.
+- Edit sessions.
+- Delete future sessions.
+- Drag and drop.
+- Replace teachers.
+- Replace subjects.
+- Change classes.
+- Temporary timetable changes.
+- Permanent timetable changes.
+- Set effective dates.
+
+6.5 Conflict Detection
+
+Before saving, validate:
+
+1. A teacher cannot teach two classes at the same time.
+2. A class cannot study two subjects at the same time.
+3. A classroom cannot be assigned to two sessions at the same time, if room management is enabled.
+4. Periods must not overlap incorrectly.
+5. Teacher availability must be respected.
+
+Display clear error messages.
+
+Never silently accept conflicts.
+
+6.6 Timetable History
+
+Maintain timetable versions.
+
+When a timetable changes:
+
+- Preserve old records.
+- Record who changed it.
+- Record the change date.
+- Apply the new timetable only within its effective dates.
+- Preserve historical teaching sessions.
+
+---
+
+PART 7: SCHOOL CALENDAR AND HOLIDAY MANAGEMENT
+
+Create a dedicated school calendar.
+
+7.1 Calendar Event Types
+
+Support:
+
+- Academic opening.
+- Academic closing.
+- Weekly holiday.
+- Cambodian national holiday.
+- Traditional festival.
+- School holiday.
+- Examination.
+- Teacher meeting.
+- School event.
+- Special activity.
+- Emergency closure.
+- Half-day closure.
+
+7.2 Calendar Fields
+
+- eventId
+- academicYearId
+- eventTitle
+- eventType
+- startDate
+- endDate
+- startTime
+- endTime
+- isFullDay
+- isTeachingDay
+- description
+- createdBy
+
+7.3 Calendar Views
+
+- Daily.
+- Weekly.
+- Monthly.
+- Yearly.
+
+Use different colors for event types.
+
+Allow administrators to create, edit, and delete events.
+
+Support multi-day events.
+
+Allow administrators to verify and manually enter official holiday dates each academic year.
+
+IMPORTANT:
+
+The Automatic Curriculum Scheduler must use this calendar when calculating valid teaching dates.
+
+Do not automatically assume every public holiday or school event is a full-day closure.
+
+---
+
+PART 8: AUTOMATIC CURRICULUM SCHEDULER
+
+THIS IS THE CORE ENGINE OF THE APPLICATION.
+
+Build a reliable scheduling engine that automatically converts annual curriculum into actual teaching dates.
+
+8.1 Required Inputs
+
+The scheduler must use:
+
+1. Academic year.
+2. Academic opening date.
+3. Academic closing date.
+4. Class curriculum.
+5. Teacher timetable.
+6. Class timetable.
+7. Subject assignments.
+8. Teaching period settings.
+9. School calendar.
+10. Required teaching periods per lesson.
+
+8.2 Scheduling Algorithm
+
+For each academic year:
+
+STEP 1:
+Load the selected academic year.
+
+STEP 2:
+Load the annual curriculum.
+
+STEP 3:
+Load the teacher timetable and class timetable.
+
+STEP 4:
+Generate all teaching sessions between the opening and closing dates.
+
+STEP 5:
+Remove sessions falling on:
+
+- Weekly holidays.
+- Official school holidays.
+- Full-day school closures.
+- Other configured non-teaching dates.
+
+STEP 6:
+Respect half-day closures and blocked teaching periods.
+
+STEP 7:
+Sort valid sessions chronologically.
+
+STEP 8:
+Match each valid session to the correct class and subject.
+
+STEP 9:
+Allocate curriculum topics according to their lesson order and required periods.
+
+STEP 10:
+Save all generated sessions in ScheduledLessons.
+
+STEP 11:
+Calculate expected curriculum completion dates.
+
+STEP 12:
+Display the full academic teaching calendar.
+
+8.3 Important Scheduling Rules
+
+- Never schedule a subject outside its teacher timetable.
+- Never assign a lesson to the wrong class.
+- Never skip curriculum items.
+- Never duplicate generated teaching sessions.
+- Never schedule during non-teaching periods.
+- Preserve lesson order.
+- Respect the required periods for each lesson.
+- Support multi-period lessons.
+- Support examination and review periods.
+- Support curriculum without a fixed topic if the administrator explicitly configures it.
+- Detect insufficient teaching capacity.
+- Display warnings for unfinished curriculum.
+
+8.4 Multiple Periods Per Lesson
+
+Example:
+
+Lesson: Linear Equations.
+
+Required periods: 3.
+
+The scheduler must allocate:
+
+- Period 1: Linear Equations.
+- Period 2: Linear Equations.
+- Period 3: Linear Equations.
+
+After completing three teaching periods, move to the next curriculum lesson.
+
+Do not create three unrelated lessons.
+
+8.5 Regenerate Schedule
+
+When administrators change:
+
+- Opening date.
+- Closing date.
+- Timetable.
+- Holidays.
+- Curriculum.
+- Required periods.
+
+The system must:
+
+1. Identify affected future sessions.
+2. Preserve completed sessions.
+3. Preserve attendance records.
+4. Preserve completed lesson plans.
+5. Generate a preview of changes.
+6. Show removed and newly added sessions.
+7. Require administrator confirmation.
+8. Apply changes safely.
+9. Record the operation in AuditLogs.
+
+Never delete historical teaching records during regeneration.
+
+8.6 Missed Lessons
+
+If a teacher misses a session:
+
+- Mark it as missed.
+- Record the reason.
+- Calculate remaining periods.
+- Offer available make-up dates.
+- Reschedule the unfinished curriculum.
+- Update expected completion dates.
+- Maintain the original historical record.
+
+8.7 Manual Adjustment
+
+Administrators can manually:
+
+- Move a lesson.
+- Change a teaching date.
+- Assign a substitute teacher.
+- Change a topic.
+- Insert an examination.
+- Insert a revision session.
+
+Manual adjustments must be protected from accidental automatic overwriting.
+
+---
+
+PART 9: CLASS CURRICULUM VIEW
+
+Create a separate page named:
+
+CLASS CURRICULUM
+
+The page must display the actual teaching curriculum generated from teacher timetables.
+
+9.1 Filters
+
+- Academic year.
+- Grade.
+- Class.
+- Teacher.
+- Subject.
+- Chapter.
+- Month.
+- Week.
+- Teaching status.
+
+9.2 TABLE VIEW
+
+Create a professional data table with columns:
+
+1. Date.
+2. Weekday.
+3. Period.
+4. Start time.
+5. End time.
+6. Teacher.
+7. Class.
+8. Subject.
+9. Chapter.
+10. Lesson.
+11. Topic.
+12. Required periods.
+13. Teaching status.
+14. Lesson plan status.
+15. Attendance status.
+
+Features:
+
+- Search.
+- Sort.
+- Filter.
+- Pagination.
+- Column visibility.
+- Print.
+- Excel export.
+- PDF export.
+
+9.3 CALENDAR VIEW
+
+Create a visual academic calendar.
+
+Support:
+
+- Day view.
+- Week view.
+- Month view.
+
+Display each lesson as a calendar event.
+
+Use color coding for:
+
+- Planned.
+- Prepared.
+- Completed.
+- Missed.
+- Rescheduled.
+- Examination.
+- Holiday.
+
+Clicking a lesson opens a detail panel.
+
+The detail panel must include:
+
+- Lesson information.
+- Teacher.
+- Class.
+- Subject.
+- Lesson plan.
+- Attendance.
+- Teaching progress.
+- Notes.
+
+Provide a button to switch between TABLE VIEW and CALENDAR VIEW.
+
+Remember the user's preferred view.
+
+---
+
+PART 10: LESSON PLAN MANAGEMENT
+
+Create a dedicated lesson plan module.
+
+10.1 Automatic Lesson Plan Creation
+
+When ScheduledLessons is generated, create a linked lesson plan record with the following prefilled fields:
+
+- AcademicYear.
+- Date.
+- Teacher.
+- Class.
+- Subject.
+- Period.
+- Chapter.
+- Lesson.
+- Topic.
+
+Do not create duplicate lesson plans when the schedule is regenerated.
+
+10.2 Lesson Plan Fields
+
+- lessonPlanId
+- scheduledLessonId
+- academicYearId
+- teacherId
+- classId
+- subjectId
+- date
+- topic
+- objectives
+- teachingMaterials
+- teachingMethods
+- teacherActivities
+- studentActivities
+- teachingProcedure
+- assessment
+- homework
+- notes
+- attachments
+- status
+- updatedAt
+
+10.3 Lesson Plan Editor
+
+Provide a professional form editor.
+
+Allow:
+
+- Save draft.
+- Edit.
+- Duplicate.
+- Copy from previous lesson.
+- Reuse templates.
+- Attach files.
+- Attach images.
+- Print.
+- Export PDF.
+
+10.4 Lesson Plan Status
+
+- Not Prepared.
+- Draft.
+- Prepared.
+- Taught.
+- Cancelled.
+- Rescheduled.
+
+Teachers may only modify their assigned lesson plans unless granted additional permissions.
+
+---
+
+PART 11: STUDENT ATTENDANCE MANAGEMENT
+
+Create a dedicated attendance module.
+
+11.1 Attendance Workflow
+
+1. Select academic year.
+2. Select date.
+3. Select class.
+4. Select scheduled teaching period.
+5. Automatically load enrolled students.
+6. Display student names and student codes.
+7. Record attendance.
+8. Save records.
+9. Display a summary.
+
+11.2 Attendance Status
+
+- PRESENT: មានវត្តមាន.
+- ABSENT: អវត្តមាន.
+- EXCUSED: អវត្តមានមានច្បាប់.
+- LATE: មកយឺត.
+- LEFT_EARLY: ចេញមុនម៉ោង.
+
+11.3 Attendance Table
+
+Columns:
+
+- No.
+- Student Code.
+- Student Name.
+- Gender.
+- Attendance Status.
+- Reason.
+- Notes.
+
+Provide:
+
+- Mark all present.
+- Mark individual absent.
+- Quick status selection.
+- Search student.
+- Save attendance.
+- Edit attendance with permission.
+
+11.4 Attendance Rules
+
+- Attendance is recorded per teaching period.
+- Each record must reference a ScheduledLessonID.
+- Prevent duplicate records for the same student and scheduled lesson.
+- Load students using the enrollment valid on the teaching date.
+- Preserve historical attendance.
+- Prevent unauthorized changes.
+- Track who recorded and edited attendance.
+
+11.5 Attendance Reports
+
+Display:
+
+- Daily attendance.
+- Monthly attendance.
+- Attendance by class.
+- Attendance by subject.
+- Attendance by student.
+- Frequent absences.
+- Late arrivals.
+- Attendance percentage.
+
+Formula:
+
+Attendance Percentage =
+Present-equivalent attended periods / Total eligible teaching periods × 100.
+
+Make the treatment of excused absences configurable in report settings.
+
+---
+
+PART 12: TEACHING PROGRESS MANAGEMENT
+
+Create a teaching progress system.
+
+For every scheduled lesson, allow the teacher to select:
+
+- Not Started.
+- In Progress.
+- Completed.
+- Missed.
+- Rescheduled.
+
+When marking Completed:
+
+- Save actual completion date.
+- Save actual teaching periods.
+- Update curriculum progress.
+- Update dashboard statistics.
+
+Calculate:
+
+Completion Percentage =
+Completed Teaching Periods / Planned Teaching Periods × 100.
+
+Display:
+
+- Planned progress.
+- Actual progress.
+- Remaining periods.
+- Delayed lessons.
+- Expected completion.
+
+Do not count a lesson as completed merely because its date has passed.
+
+---
+
+PART 13: MAKE-UP LESSON MANAGEMENT
+
+Create a separate make-up lesson module.
+
+Features:
+
+- View missed lessons.
+- View remaining curriculum periods.
+- Find available timetable slots.
+- Check teacher availability.
+- Check class availability.
+- Avoid holidays.
+- Schedule make-up lessons.
+- Assign substitute teachers.
+- Track completion.
+
+Maintain a link between the original session and the make-up session.
+
+Do not count both sessions as two completed curriculum periods for the same teaching work.
+
+---
+
+PART 14: REPORTS AND ANALYTICS
+
+Create a dedicated reports page.
+
+14.1 Academic Reports
+
+- Annual curriculum.
+- Curriculum by grade.
+- Curriculum by class.
+- Curriculum by subject.
+- Curriculum completion.
+- Planned versus actual progress.
+
+14.2 Teacher Reports
+
+- Teaching hours by teacher.
+- Lessons completed.
+- Lessons missed.
+- Lessons rescheduled.
+- Lesson plans prepared.
+- Teaching workload.
+
+14.3 Attendance Reports
+
+- Attendance by class.
+- Attendance by student.
+- Attendance by subject.
+- Monthly attendance.
+- Student absence frequency.
+
+14.4 Filters
+
+- Academic year.
+- Date range.
+- Teacher.
+- Class.
+- Subject.
+- Grade.
+
+14.5 Export
+
+Support:
+
+- PDF.
+- Excel.
+- CSV.
+- Print.
+
+Reports must use actual Firebase data.
+
+---
+
+PART 15: DASHBOARD
+
+Create a professional school dashboard.
+
+Summary Cards
+
+- Total teachers.
+- Total students.
+- Total classes.
+- Total subjects.
+- Today's teaching sessions.
+- Completed lessons.
+- Pending lesson plans.
+- Pending attendance records.
+
+Charts
+
+1. Curriculum completion percentage.
+2. Student attendance percentage.
+3. Teaching workload by teacher.
+4. Curriculum progress by subject.
+5. Monthly teaching progress.
+6. Monthly student attendance.
+
+Today's Tasks
+
+Display:
+
+- Today's timetable.
+- Today's lesson plans.
+- Missing attendance records.
+- Upcoming examinations.
+- Upcoming holidays.
+- Delayed curriculum.
+
+Allow users to see information based on their role.
+
+---
+
+PART 16: FIRESTORE DATABASE DESIGN
+
+Create the following collections:
+
+1. users
+2. schoolSettings
+3. academicYears
+4. teachers
+5. students
+6. classes
+7. classEnrollments
+8. subjects
+9. curriculum
+10. teachingPeriods
+11. timetables
+12. timetableVersions
+13. schoolCalendar
+14. scheduledLessons
+15. lessonPlans
+16. lessonPlanTemplates
+17. attendance
+18. makeUpLessons
+19. reports
+20. auditLogs
+
+Database Requirements
+
+- Use unique document IDs.
+- Use consistent field naming.
+- Create proper references.
+- Create necessary Firestore indexes.
+- Avoid unnecessary duplicate records.
+- Preserve historical information.
+- Validate all critical operations.
+- Use batch writes and transactions where appropriate.
+- Handle concurrent updates.
+- Use pagination for large collections.
+
+Use server-side functions for sensitive operations such as schedule generation, bulk attendance processing, and privileged administration where appropriate.
+
+---
+
+PART 17: IMPORT AND EXPORT
+
+Allow importing:
+
+- Teachers.
+- Students.
+- Classes.
+- Subjects.
+- Annual curriculum.
+- Timetables.
+
+Support Excel and CSV.
+
+Before importing:
+
+1. Preview uploaded data.
+2. Validate required fields.
+3. Identify duplicate records.
+4. Identify invalid references.
+5. Show errors.
+6. Allow correction.
+7. Confirm import.
+
+Never silently discard invalid records.
+
+Export:
+
+- Curriculum.
+- Timetables.
+- Lesson plans.
+- Attendance.
+- Reports.
+
+---
+
+PART 18: ERROR HANDLING AND DATA PROTECTION
+
+Implement:
+
+- Form validation.
+- Duplicate detection.
+- Network error handling.
+- Firebase error handling.
+- Loading indicators.
+- Confirmation before deletion.
+- Success and error notifications.
+- Audit history.
+- Data backup procedures.
+
+Use soft deletion for important academic records.
+
+Never permanently delete completed teaching sessions or attendance history through normal UI operations.
+
+Use server-side timestamps for important audit records.
+
+Do not expose Firebase Admin credentials or private API keys in frontend code.
+
+---
+
+PART 19: REQUIRED DEVELOPMENT WORKFLOW
+
+Do not try to create a large application using one unstructured component.
+
+Build a modular, fully working system.
+
+PHASE 1: PROJECT FOUNDATION
+
+Implement:
+
+- Project structure.
+- Firebase configuration.
+- Authentication.
+- Role-based access.
+- Application layout.
+- Sidebar.
+- Dashboard.
+- School settings.
+
+PHASE 2: SCHOOL DATA
+
+Implement:
+
+- Academic years.
+- Teachers.
+- Students.
+- Classes.
+- Subjects.
+- Class enrollment.
+
+PHASE 3: ACADEMIC PLANNING
+
+Implement:
+
+- Annual curriculum.
+- Curriculum import/export.
+- Teaching period settings.
+- Teacher timetable.
+- Class timetable.
+- Conflict detection.
+- School calendar.
+
+PHASE 4: SCHEDULING ENGINE
+
+Implement:
+
+- Teaching session generation.
+- Holiday exclusion.
+- Curriculum allocation.
+- Multi-period lessons.
+- Automatic schedule generation.
+- Schedule preview.
+- Safe regeneration.
+- Make-up lessons.
+
+PHASE 5: TEACHER WORKFLOW
+
+Implement:
+
+- Daily teaching schedule.
+- Class curriculum.
+- Lesson plan editor.
+- Student attendance.
+- Teaching progress.
+
+PHASE 6: REPORTING
+
+Implement:
+
+- Academic reports.
+- Attendance reports.
+- Teacher reports.
+- Dashboard charts.
+- PDF export.
+- Excel export.
+
+PHASE 7: TESTING AND DEPLOYMENT
+
+Implement:
+
+- Functional testing.
+- Database testing.
+- Permission testing.
+- Scheduler testing.
+- Mobile testing.
+- Performance improvements.
+- Production deployment instructions.
+
+IMPORTANT:
+
+These phases are implementation milestones, not permission to stop after creating a basic scaffold.
+
+Continue implementing the requested application until all modules are functional.
+
+If an external service requires user configuration, build the integration and clearly explain the exact setup steps.
+
+---
+
+PART 20: TESTING REQUIREMENTS
+
+Create automated tests for the most important business rules.
+
+Test cases must include:
+
+1. A teacher cannot have two overlapping lessons.
+2. A class cannot have two overlapping subjects.
+3. Holidays are excluded from automatic scheduling.
+4. Half-day holidays block only the configured periods.
+5. Curriculum topics are allocated in the correct sequence.
+6. Multi-period lessons are allocated correctly.
+7. Regeneration preserves completed sessions.
+8. Regeneration does not duplicate scheduled lessons.
+9. Attendance cannot be duplicated.
+10. Attendance uses the correct class enrollment.
+11. Unauthorized teachers cannot access other teachers' records.
+12. A missed lesson can be rescheduled.
+13. Completed curriculum progress is calculated correctly.
+14. Date and timezone calculations work in Cambodia.
+15. Historical attendance remains unchanged when students transfer classes.
+
+---
+
+PART 21: FINAL ACCEPTANCE REQUIREMENTS
+
+The application is only complete when all the following work:
+
+[ ] Firebase authentication works.
+
+[ ] Role-based permissions work.
+
+[ ] Teachers can be managed.
+
+[ ] Students can be managed.
+
+[ ] Classes can be managed.
+
+[ ] Subjects can be managed.
+
+[ ] Academic years can be managed.
+
+[ ] Annual curriculum can be entered and edited.
+
+[ ] Teacher timetables can be created and changed.
+
+[ ] Timetable conflicts are detected.
+
+[ ] School holidays can be configured.
+
+[ ] Automatic Curriculum Scheduler generates correct teaching dates.
+
+[ ] Holidays are excluded correctly.
+
+[ ] Curriculum topics follow the correct sequence.
+
+[ ] Completed lessons are protected during regeneration.
+
+[ ] Class curriculum displays in table view.
+
+[ ] Class curriculum displays in calendar view.
+
+[ ] Lesson plans can be created and edited.
+
+[ ] Attendance can be recorded per period.
+
+[ ] Attendance reports work.
+
+[ ] Teaching progress is calculated correctly.
+
+[ ] Make-up lessons work.
+
+[ ] Dashboard uses real database information.
+
+[ ] Reports can be exported.
+
+[ ] Mobile interface works.
+
+[ ] Firebase security rules are implemented.
+
+[ ] No major buttons or forms are non-functional.
+
+---
+
+PART 22: FINAL INSTRUCTIONS TO AI STUDIO
+
+You must act as the actual developer of this application.
+
+Do not simply explain how to build it.
+
+Create the project files and implement the functionality.
+
+First inspect the project environment and existing files.
+
+If a project already exists, preserve useful working code and modify it safely.
+
+If it is a new project, create the complete project structure.
+
+After implementation:
+
+1. Show the project file structure.
+2. Explain Firebase setup.
+3. Explain Firestore collection structure.
+4. Provide the required Firestore Security Rules.
+5. Provide required indexes.
+6. Provide Cloud Functions deployment instructions if used.
+7. Explain how to create the first administrator account.
+8. Explain how to configure the first academic year.
+9. Explain how to enter curriculum and timetables.
+10. Explain how to generate the annual teaching schedule.
+11. Explain how to deploy the application.
+
+Do not claim a feature is completed unless it has been implemented and tested.
+
+Prioritize data accuracy, scheduling accuracy, security, maintainability, and ease of use.
+
+The final product must be a complete and practical school academic management application.
+
+PROJECT NAME: MY SCHOOL TASK SYSTEM
+
+BUILD THE COMPLETE APPLICATION NOW.

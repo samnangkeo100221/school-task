@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Noto+Sans+Khmer:wght@300;400;500;600;700;800&display=swap');
+
+@theme {
+  --color-primary-50: #eef6ff;
+  --color-primary-100: #d9ebff;
+  --color-primary-200: #bcdbff;
+  --color-primary-300: #8ec4ff;
+  --color-primary-400: #59a2ff;
+  --color-primary-500: #327eff;
+  --color-primary-600: #1b5ff7;
+  --color-primary-700: #1347e4;
+  --color-primary-800: #153abb;
+  --color-primary-900: #163493;
+  --color-primary-950: #122159;
+  --font-khmer: 'Noto Sans Khmer', 'Kantumruy Pro', sans-serif;
+}
+
+@layer base {
+  body {
+    font-family: 'Noto Sans Khmer', 'Kantumruy Pro', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
